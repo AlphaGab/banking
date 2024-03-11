@@ -21,6 +21,7 @@ def login():
        return disableCache(response)
     else:
         session.pop('cardnumber', None)
+        session.pop('bankuser',None)
         response = make_response(render_template('login.html'))
         return  disableCache(response)
 

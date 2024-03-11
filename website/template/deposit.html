@@ -1,0 +1,11 @@
+<h2>Deposit</h2>
+{% if balance %}
+    <p>Remaining Balance {{ balance }}</p>
+{% endif %}
+<form action="{{url_for('view.deposit_route')}}" method="post" autocomplete="off">
+    <label for="amount">Amount in Php:</label>
+    <br>
+    <input type="text" id="amount" name="amount" required>
+    <br><br>
+    <button type="submit">Deposit</button>
+</form>
