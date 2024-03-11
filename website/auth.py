@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,current_app,request,redirect,url_for,session,make_response
+from flask import Blueprint,render_template,current_app,request,redirect,url_for,make_response,session
 import random
 from website.bankModel import BankUser
 
@@ -8,9 +8,21 @@ auth =  Blueprint('auth',__name__)
 @auth.route('/login', methods =['GET','POST'])
 def login():
     if request.method == "POST":
-      print("Hlloe")      
-
-    return render_template('login.html')
+       cardnumber = request.form['cardnumber']
+       pin = request.form['pin']
+       bankUser = BankUser(card_number=cardnumber,pin_number=pin)
+       is_valid = authenticate_login(bankUser)
+       if is_valid:
+            session['cardnumber'] = bankUser.card_number
+            redirect_url = url_for('view.show_dashboard')  
+            return redirect(redirect_url)
+       print("here outside failed")
+       response = make_response(render_template('login.html',error_message="Invalid login credentials. Please double-check and try again"))
+       return disableCache(response)
+    else:
+        session.pop('cardnumber', None)
+        response = make_response(render_template('login.html'))
+        return  disableCache(response)
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -75,5 +87,19 @@ def disableCache(response):
     response.headers['Cache-Control'] = "no-cache, no-store, must-revalidate"
     response.headers["Pragma"] = "no-cache" 
     response.headers["Expires"] = "0"
-    print("here disabled")
     return response
+
+def authenticate_login(bankUser: BankUser):
+    connection = current_app.config['db_connection']
+    try:
+        with connection.cursor() as cursor:
+            query = "SELECT * FROM users WHERE card_number = %s AND pin_number = %s"
+            cursor.execute(query, (bankUser.card_number, bankUser.pin_number))
+            result = cursor.fetchone()
+
+        if result: return True
+        else: return False
+    
+    except Exception as e:
+        print(f"Error executing the query: {str(e)}")
+    

@@ -1,0 +1,37 @@
+<!-- dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+
+{% if bank_user %}
+    <div class="user-details-container">
+        <h2>Bank Account</h2>
+        <dl>
+            <dt>Name:</dt>
+            <dd>{{ bank_user.customer_name }}</dd>
+
+            <dt>Card Number:</dt>
+            <dd>{{ bank_user.card_number }}</dd>
+
+            <dt>Balance:</dt>
+            <dd>{{ bank_user.balance }}</dd>
+
+            <dt>Account Type:</dt>
+            <dd>{{ bank_user.account_type }}</dd>
+        </dl>
+        <div class="action-buttons">
+            <a href="/" class="button">Withdraw</a>
+            <a href="/" class="button">Deposit</a>
+        </div>
+    </div>
+{% endif %}
+
+</body>
+</html>

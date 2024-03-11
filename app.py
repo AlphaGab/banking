@@ -1,11 +1,12 @@
 from flask import Flask,render_template,request,redirect,url_for
 from website.auth import auth
+from website.views import view
 import yaml
 import pymysql
 
 
 
-app = Flask(__name__,template_folder='website/template')
+app = Flask(__name__,template_folder='website/template',static_folder='website/static')
 db = yaml.safe_load(open('db.yaml'))
 
 
@@ -26,15 +27,11 @@ app.config['db_connection']= pymysql.connect(
 
 
 app.register_blueprint(auth,url_prefix='/')
-
+app.register_blueprint(view,url_prefix='/view')
 @app.route('/')
 def index():
     return redirect(url_for('auth.login'))
-
-
-
-
-
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
