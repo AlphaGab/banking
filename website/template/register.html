@@ -1,0 +1,47 @@
+<!-- register.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+
+<div style="text-align: center; margin-top: 50px;">
+    <h2>Registration</h2>
+    <form action="/register" method="post" autocomplete="off">
+        <label for="name">Name:</label>
+        <br>
+        <input type="text" id="name" name="name" required {% if bankuser %}value="{{ bankuser.customer_name }}"{% endif %}>
+        <br><br>
+
+        <label for="pin">PIN Number:</label>
+        <br>
+        <input type="password" id="pin" name="pin" required {% if bankuser %}value="{{ bankuser.pin_number }}"{% endif %}>
+        <br><br>
+
+        <label>Account Type:</label>
+        <br>
+        <label for="fixed">Fixed</label>
+        <input type="radio" id="fixed" name="account_type" value="fixed" required >
+        
+        <label for="credit">Credit</label>
+        <input type="radio" id="credit" name="account_type" value="credit" required >
+        <br><br>
+
+        <label for="initial_deposit">Initial Deposit:</label>
+        <br>
+        <input type="number" id="initial_deposit" name="initial_deposit" required {% if bankuser %}value="{{ bankuser.balance }}"{% endif %}>
+        <br><br>
+        <button type="submit">Register</button>
+    </form>
+    <a href="/login" style="color: blue;">Login Account</a>
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

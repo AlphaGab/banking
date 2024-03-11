@@ -1,0 +1,9 @@
+
+
+{% if cardnumber%}
+    <h2>Remember This For Login</h2>
+    <p>card number: {{cardnumber}}</p>
+    <a href="/login" style="color:blue ;">Login Account</a>
+{% else %}
+    No card number available
+{% endif %}
